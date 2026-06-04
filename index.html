@@ -22,118 +22,58 @@
 </head>
 
 <body>
-
 <!--  
     Module: TestGitHub
     Group: Group 1
-    Instance: Data visualization 1
+    Instance: Catalog item 1
 -->
-<sn-embedx-visualization-donut
-	sort-by="value"
-	data-labels-type="value"
-	data-sources='[{"allowRealTime":true,"dataCategories":["trend","group","simple"],"filterQuery":"active=true^sys_updated_onONLast 7 days@javascript:gs.beginningOfLast7Days()@javascript:gs.endOfLast7Days()","id":"dGFibGVzbl9jdXN0b21lcnNlcnZpY2VfY2FzZTE3MjU0MjYxODczODc=","isDatabaseView":false,"label":"Case","preferredVisualizations":["d24d53f60350de7a652caf3188a46ed2"],"reportSourceSysId":null,"sourceType":"table","tableOrViewName":"sn_customerservice_case"}]'
-	metrics='[{"aggregateFunction":"COUNT","axisId":"primary","dataSource":"dGFibGVzbl9jdXN0b21lcnNlcnZpY2VfY2FzZTE3MjU0MjYxODczODc=","id":"ZEdGaWJHVnpibDlqZFhOMGIyMWxjbk5sY25acFkyVmZZMkZ6WlRFM01qVTBNall4T0Rjek9EYz0xNzI1NDI2MTg4NjYx","numberFormat":{"customFormat":false}}]'
-	group-by='[{"disableRanges":false,"groupBy":[{"dataSource":"dGFibGVzbl9jdXN0b21lcnNlcnZpY2VfY2FzZTE3MjU0MjYxODczODc=","groupByField":"state","isChoice":true,"isPaBucket":false,"isRange":false}],"hideZeroValues":true,"maxNumberOfGroups":"ALL","numberOfGroupsBasedOn":"NO_OF_GROUP_BASED_ON_PER_METRIC","showOthers":false}]'
-	additional-group-by-config='[{"id":"state","label":"State"},{"id":"account","label":"Account"}]'
-	truncation-type="end"
-	show-register
-	register-position="bottom"
-	register-orientation="horizontal"
-	legend-horizontal-alignment="center"
-	show-percentage-of-total-in-tooltip
-	ranges-config='{}'
-	color-config='{"type":"default"}'
-	show-header
-	line-clamp="1"
-	header-title-alignment="start"
-	header-color='null'
-	title-color='null'
-	sort-by-order="desc"
-	empty-state-illustration="no-data"
-	empty-state-heading="No data available."
-	empty-state-heading-level="3"
-	empty-state-content="There are no scores available for the selected criteria. Contact your admin for more info."
-	empty-state-alignment="vertical-centered"
-	number-of-periods="3"
-	period="M"
-	show-export-options
-	user-info='"@context.session.user"'
-	shared-context='null'
-	colors='{}'>
-</sn-embedx-visualization-donut>
+<sn-embedx-catalog-item-form
+	sys-id="b6f0ba8fc35eea9415eb3a02b401314b"
+	confirmation-text="Request submitted successfully!"
+	confirmation-sub-text="Estimated resolution in 24 hours"
+	reference-number-label="Reference Number :"
+	primary-button-label="View details"
+	secondary-button-label="Browse services"
+	prefill-fields='{}'
+	custom-illustration-size="Auto">
+</sn-embedx-catalog-item-form>
 <!--
 	The component also includes the following additional properties:
-	show-border
-	drilldown-label
-	show-data-labels
-	max-label-size
-	show-register-on-same-line
-	show-register-value
-	legend-max-item-width
-	legend-expand-to-fit
-	show-register-percentage
-	wrap-title
-	show-header-separator
-	header-title
-	description
-	refresh-request
-	show-additional-group-by-selector
-	show-metric-label
-	show-total-value
-	enable-click-and-stay
-	show-data-table
-	enable-custom-empty-state
-	apply-date-range
-	show-absolute-period
-	auto-aggregate-periods
-	score-type
-	start-time
-	end-time
-	use-current-date-for-end
-	show-extended-error-messages
+	hide-reference-number
+	hide-primary-button
+	hide-secondary-button
+	hide-record-created-confirmation
+	hide-errors
+	hide-notifications
+	hide-additional-details
 -->
 
 <script type="module">
-	import { getEmbeddables } from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
+	import { getEmbeddables, setEvents, setProperties } from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
 	
-	getEmbeddables(["sn-embedx-visualization-donut"]);
-</script>
-<!--  
-    Module: TestGitHub
-    Group: Group 1
-    Instance: My Services 1
--->
-<sn-custom-embedx-myis></sn-custom-embedx-myis>
-<!--
-	The component also includes the following additional properties:
-	
--->
+	const snEmbedxCatalogItemForm = document.querySelector('sn-embedx-catalog-item-form');
 
-<script type="module">
-	import { getEmbeddables } from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
-	
-	getEmbeddables(["sn-custom-embedx-myis"]);
-</script>
-<!--  
-    Module: TestGitHub
-    Group: Group 1
-    Instance: Catalog browse 1
--->
-<sn-embedx-catalog-browse selection-type="catalog"></sn-embedx-catalog-browse>
-<!--
-	The component also includes the following additional properties:
-	select-catalogs
-	select-categories
-	hide-price
-	hide-navigation-panel
-	hide-popular-requests
-	hide-recent-requests
--->
+	/* Uncomment this code for the default behaviour of the Catalog item component.
 
-<script type="module">
-	import { getEmbeddables } from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
-	
-	getEmbeddables(["sn-embedx-catalog-browse"]);
+	// Get the catalog item record id from the current URL.
+	// Optionally, get query to pre fill the form.
+	const currentURL = new URL(window.location.href);
+	const urlParams = new URLSearchParams(currentURL.search);
+	const account = urlParams.get('emb_account');
+	const preferred_language = urlParams.get('emb_preferred_language');
+	// Update the sysId of the component property.
+	// Optionally, update the prefill fields property
+	const prefillConfig = {
+			account: account,
+			preferred_language: preferred_language
+	};
+	setProperties(snEmbedxCatalogItemForm,{
+		prefillFields: prefillConfig
+	});
+*/
+
+	getEmbeddables(["sn-embedx-catalog-item-form"]);
 </script>
+
 </body>
 </html>
