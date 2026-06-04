@@ -1,117 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>ServiceNow Embed Test</title>
-
+    <title>ServiceNow Popup Test</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
 
+        iframe {
+            width: 100%;
+            height: 900px;
+            border: 1px solid #ccc;
+            display: none;
+            margin-top: 20px;
+        }
+
         button {
             padding: 10px 20px;
-            margin-right: 10px;
         }
     </style>
-
-    <script type="module">
-
-        import {
-            init,
-            login,
-            logout,
-            getEmbeddables
-        } from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
-
-        window.currentToken = null;
-
-        function getTokenCallBack() {
-            return Promise.resolve(window.currentToken);
-        }
-
-        await init({
-            theme: 'fad87d2ca304121029a4d1aed31e610f',
-            baseURL: 'https://abbaiagentspov.service-now.com',
-            authCallback: getTokenCallBack,
-            module: '08dfb9c9879dcb1c1197670a0cbb3565',
-            pageName: document.title
-        });
-
-        getEmbeddables([
-            "sn-embedx-case-list"
-        ]);
-
-        window.loginSnow = async function () {
-
-            const popup = window.open(
-                'https://abbaiagentspov.service-now.com',
-                'snowLogin',
-                'width=700,height=800'
-            );
-
-            const timer = setInterval(async () => {
-
-                if (popup.closed) {
-
-                    clearInterval(timer);
-
-                    console.log('Login popup closed');
-
-                    try {
-
-                        // Replace with actual token acquisition
-                        window.currentToken = '';
-
-                        await login();
-
-                        document.getElementById('status').innerText =
-                            'Login event sent to embeddable framework';
-
-                    } catch (e) {
-
-                        console.error(e);
-
-                        document.getElementById('status').innerText =
-                            'Login failed';
-                    }
-                }
-
-            }, 1000);
-        };
-
-        window.logoutSnow = async function () {
-
-            window.currentToken = null;
-
-            await logout();
-
-            document.getElementById('status').innerText =
-                'Logged out';
-        };
-
-    </script>
 </head>
 <body>
 
-    <h1>ServiceNow Embeddable Test</h1>
+<h2>ServiceNow Login Test</h2>
 
-    <button onclick="loginSnow()">Login</button>
+<button onclick="loginToSnow()">
+    Login to ServiceNow
+</button>
 
-    <button onclick="logoutSnow()">Logout</button>
+<p id="status">
+    Not logged in
+</p>
 
-    <p id="status">Not logged in</p>
+<iframe id="snowFrame"></iframe>
 
-    <hr>
+<script>
 
-    <sn-embedx-case-list
-        table="incident"
-        limit="20"
-        list-title="List of Cases"
-        query="opened_byDYNAMIC90d1921e5f510100a9ad2572f2b477fe"
-        columns="number,short_description,sys_updated_on,state">
-    </sn-embedx-case-list>
+const SNOW_URL =
+    "https://abbaiagentspov.service-now.com";
+
+function loginToSnow() {
+
+    document.getElementById("status").innerText =
+        "Waiting for popup to close...";
+
+    const popup = window.open(
+        SNOW_URL,
+        "snowLogin",
+        "width=1000,height=800"
+    );
+
+    const timer = setInterval(() => {
+
+        if (popup.closed) {
+
+            clearInterval(timer);
+
+            document.getElementById("status").innerText =
+                "Popup closed. Loading iframe...";
+
+            const frame =
+                document.getElementById("snowFrame");
+
+            frame.src = SNOW_URL;
+
+            frame.style.display = "block";
+        }
+
+    }, 1000);
+}
+
+</script>
 
 </body>
 </html>
