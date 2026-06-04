@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServiceNow Embed Test</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+#status {
+    padding: 10px;
+    margin-bottom: 15px;
+    background: #f4f4f4;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#snowFrame {
+    width: 100%;
+    height: 900px;
+    border: 1px solid #ccc;
+    display: none;
+    margin-top: 20px;
+}
+</style>
+</head>
+<body>
+
+<h2>ServiceNow Embed Test</h2>
+
+<div id="status">
+Checking ServiceNow session...
+</div>
+
+<button id="loginBtn" style="display:none;">
+Login to ServiceNow
+</button>
+
+<iframe id="snowFrame"></iframe>
+
+<script>
+
+const SN_INSTANCE =
+    'https://abbaiagentspov.service-now.com';
+
+const SN_API =
+    `${SN_INSTANCE}/api/now/table/sys_user?sysparm_limit=1`;
+
+const SN_IFRAME_PAGE =
+    `${SN_INSTANCE}`;
+
+const loginButton =
+    document.getElementById('loginBtn');
+
+const statusDiv =
+    document.getElementById('status');
+
+const iframe =
+    document.getElementById('snowFrame');
+
+window.addEventListener('load', initialize);
+
+async function initialize() {
+
+    statusDiv.innerText =
+        'Checking existing ServiceNow session...';
+
+    const loggedIn =
+        await isLoggedIn();
+
+    if (loggedIn) {
+
+        statusDiv.innerText =
+            'Already authenticated. Loading iframe...';
+
+        loadIframe();
+
+    } else {
+
+        statusDiv.innerText =
+            'No ServiceNow session detected. Please login.';
+
+        loginButton.style.display =
+            'inline-block';
+    }
+}
+
+loginButton.addEventListener(
+    'click',
+    loginToServiceNow
+);
+
+function loginToServiceNow() {
+
+    statusDiv.innerText =
+        'Waiting for ServiceNow login...';
+
+    const popup = window.open(
+        `${SN_INSTANCE}/login.do`,
+        'snowLogin',
+        'width=900,height=900'
+    );
+
+    const interval = setInterval(
+        async () => {
+
+            if (!popup || popup.closed) {
+
+                clearInterval(interval);
+
+                statusDiv.innerText =
+                    'Checking login status...';
+
+                const loggedIn =
+                    await isLoggedIn();
+
+                if (loggedIn) {
+
+                    statusDiv.innerText =
+                        'Login successful. Loading iframe...';
+
+                    loadIframe();
+
+                } else {
+
+                    statusDiv.innerText =
+                        'Login not detected. Try again.';
+                }
+            }
+
+        },
+        1000
+    );
+}
+
+async function isLoggedIn() {
+
+    try {
+
+        const response = await fetch(
+            SN_API,
+            {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }
+        );
+
+        console.log(
+            'Session check status:',
+            response.status
+        );
+
+        return response.ok;
+
+    } catch (error) {
+
+        console.error(
+            'Session check failed:',
+            error
+        );
+
+        return false;
+    }
+}
+
+function loadIframe() {
+
+    loginButton.style.display =
+        'none';
+
+    iframe.src =
+        SN_IFRAME_PAGE;
+
+    iframe.style.display =
+        'block';
+}
+
+</script>
+
+</body>
+</html>
