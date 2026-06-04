@@ -1,28 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>ServiceNow Iframe Test</title>
+    <title>SN Login Test</title>
     <style>
         html, body {
             margin: 0;
-            padding: 0;
-            width: 100%;
             height: 100%;
-            overflow: hidden;
         }
 
-        iframe {
+        #loginBtn {
+            margin: 20px;
+            padding: 10px 20px;
+        }
+
+        #snowFrame {
             width: 100%;
-            height: 100%;
+            height: calc(100vh - 60px);
             border: none;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <iframe
-        src="https://abbaiagentspov.service-now.com/login.do"
-        allow="fullscreen">
-    </iframe>
+
+<button id="loginBtn">Login to ServiceNow</button>
+
+<iframe id="snowFrame"></iframe>
+
+<script>
+    let loginWindow = null;
+
+    document.getElementById("loginBtn").addEventListener("click", () => {
+
+        loginWindow = window.open(
+            "https://abbaiagentspov.service-now.com/login_success_page.do",
+            "snowLogin",
+            "width=900,height=700"
+        );
+    });
+
+    window.addEventListener("message", (event) => {
+
+        console.log("Received:", event.data);
+
+        if (event.data?.type === "LOGIN_SUCCESS") {
+
+            const frame = document.getElementById("snowFrame");
+
+            frame.src = "https://abbaiagentspov.service-now.com/";
+            frame.style.display = "block";
+
+            document.getElementById("loginBtn").style.display = "none";
+        }
+    });
+</script>
+
 </body>
 </html>
