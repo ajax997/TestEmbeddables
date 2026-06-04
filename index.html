@@ -1,19 +1,3 @@
-<script type="module">
-    import { init , login , logout } from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
-
-    await init({
-        theme: 'fad87d2ca304121029a4d1aed31e610f',
-        baseURL: 'https://abbaiagentspov.service-now.com',
-        authCallback: getTokenCallBack,
-        module: '08dfb9c9879dcb1c1197670a0cbb3565',
-        pageName: document.title
-    });
-
-    function getTokenCallBack() {
-        var idToken;
-        return Promise.resolve(idToken);
-    }
-</script>
 
 <!DOCTYPE html>
 <html>
@@ -39,18 +23,80 @@
 
 <body>
 
-<sn-embedx-case-list
-    table="incident"
-    limit="20"
-    list-title="List of Cases"
-    query="opened_byDYNAMIC90d1921e5f510100a9ad2572f2b477fe"
-    columns="number,short_description,sys_updated_on,state">
-</sn-embedx-case-list>
+<!--  
+    Module: TestGitHub
+    Group: Group 1
+    Instance: Data visualization 1
+-->
+<sn-embedx-visualization-donut
+	sort-by="value"
+	data-labels-type="value"
+	data-sources='[{"allowRealTime":true,"dataCategories":["trend","group","simple"],"filterQuery":"active=true^sys_updated_onONLast 7 days@javascript:gs.beginningOfLast7Days()@javascript:gs.endOfLast7Days()","id":"dGFibGVzbl9jdXN0b21lcnNlcnZpY2VfY2FzZTE3MjU0MjYxODczODc=","isDatabaseView":false,"label":"Case","preferredVisualizations":["d24d53f60350de7a652caf3188a46ed2"],"reportSourceSysId":null,"sourceType":"table","tableOrViewName":"sn_customerservice_case"}]'
+	metrics='[{"aggregateFunction":"COUNT","axisId":"primary","dataSource":"dGFibGVzbl9jdXN0b21lcnNlcnZpY2VfY2FzZTE3MjU0MjYxODczODc=","id":"ZEdGaWJHVnpibDlqZFhOMGIyMWxjbk5sY25acFkyVmZZMkZ6WlRFM01qVTBNall4T0Rjek9EYz0xNzI1NDI2MTg4NjYx","numberFormat":{"customFormat":false}}]'
+	group-by='[{"disableRanges":false,"groupBy":[{"dataSource":"dGFibGVzbl9jdXN0b21lcnNlcnZpY2VfY2FzZTE3MjU0MjYxODczODc=","groupByField":"state","isChoice":true,"isPaBucket":false,"isRange":false}],"hideZeroValues":true,"maxNumberOfGroups":"ALL","numberOfGroupsBasedOn":"NO_OF_GROUP_BASED_ON_PER_METRIC","showOthers":false}]'
+	additional-group-by-config='[{"id":"state","label":"State"},{"id":"account","label":"Account"}]'
+	truncation-type="end"
+	show-register
+	register-position="bottom"
+	register-orientation="horizontal"
+	legend-horizontal-alignment="center"
+	show-percentage-of-total-in-tooltip
+	ranges-config='{}'
+	color-config='{"type":"default"}'
+	show-header
+	line-clamp="1"
+	header-title-alignment="start"
+	header-color='null'
+	title-color='null'
+	sort-by-order="desc"
+	empty-state-illustration="no-data"
+	empty-state-heading="No data available."
+	empty-state-heading-level="3"
+	empty-state-content="There are no scores available for the selected criteria. Contact your admin for more info."
+	empty-state-alignment="vertical-centered"
+	number-of-periods="3"
+	period="M"
+	show-export-options
+	user-info='"@context.session.user"'
+	shared-context='null'
+	colors='{}'>
+</sn-embedx-visualization-donut>
+<!--
+	The component also includes the following additional properties:
+	show-border
+	drilldown-label
+	show-data-labels
+	max-label-size
+	show-register-on-same-line
+	show-register-value
+	legend-max-item-width
+	legend-expand-to-fit
+	show-register-percentage
+	wrap-title
+	show-header-separator
+	header-title
+	description
+	refresh-request
+	show-additional-group-by-selector
+	show-metric-label
+	show-total-value
+	enable-click-and-stay
+	show-data-table
+	enable-custom-empty-state
+	apply-date-range
+	show-absolute-period
+	auto-aggregate-periods
+	score-type
+	start-time
+	end-time
+	use-current-date-for-end
+	show-extended-error-messages
+-->
 
 <script type="module">
-    import { getEmbeddables } from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
-
-    getEmbeddables(["sn-embedx-case-list"]);
+	import { getEmbeddables } from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
+	
+	getEmbeddables(["sn-embedx-visualization-donut"]);
 </script>
 
 </body>
