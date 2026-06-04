@@ -114,6 +114,26 @@
 	
 	getEmbeddables(["sn-custom-embedx-myis"]);
 </script>
+<!--  
+    Module: TestGitHub
+    Group: Group 1
+    Instance: Catalog browse 1
+-->
+<sn-embedx-catalog-browse selection-type="catalog"></sn-embedx-catalog-browse>
+<!--
+	The component also includes the following additional properties:
+	select-catalogs
+	select-categories
+	hide-price
+	hide-navigation-panel
+	hide-popular-requests
+	hide-recent-requests
+-->
 
+<script type="module">
+	import { getEmbeddables } from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
+	
+	getEmbeddables(["sn-embedx-catalog-browse"]);
+</script>
 </body>
 </html>
