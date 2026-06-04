@@ -1,57 +1,92 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>SN Login Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiceNow Login</title>
+
     <style>
         html, body {
             margin: 0;
             height: 100%;
+            font-family: Arial, sans-serif;
         }
 
-        #loginBtn {
-            margin: 20px;
-            padding: 10px 20px;
+        #container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        #toolbar {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
         }
 
         #snowFrame {
+            flex: 1;
             width: 100%;
-            height: calc(100vh - 60px);
             border: none;
             display: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        #status {
+            margin-left: 10px;
         }
     </style>
 </head>
 <body>
 
-<button id="loginBtn">Login to ServiceNow</button>
+<div id="container">
+    <div id="toolbar">
+        <button id="loginBtn">Login to ServiceNow</button>
+        <span id="status"></span>
+    </div>
 
-<iframe id="snowFrame"></iframe>
+    <iframe id="snowFrame"></iframe>
+</div>
 
 <script>
-    let loginWindow = null;
+    const loginBtn = document.getElementById('loginBtn');
+    const status = document.getElementById('status');
+    const frame = document.getElementById('snowFrame');
 
-    document.getElementById("loginBtn").addEventListener("click", () => {
+    loginBtn.addEventListener('click', () => {
 
-        loginWindow = window.open(
-            "https://abbaiagentspov.service-now.com/login_success_page.do",
-            "snowLogin",
-            "width=900,height=700"
+        const loginWindow = window.open(
+            'https://abbaiagentspov.service-now.com',
+            'snowLogin',
+            'width=1200,height=800'
         );
-    });
 
-    window.addEventListener("message", (event) => {
-
-        console.log("Received:", event.data);
-
-        if (event.data?.type === "LOGIN_SUCCESS") {
-
-            const frame = document.getElementById("snowFrame");
-
-            frame.src = "https://abbaiagentspov.service-now.com/";
-            frame.style.display = "block";
-
-            document.getElementById("loginBtn").style.display = "none";
+        if (!loginWindow) {
+            status.textContent = 'Popup blocked by browser.';
+            return;
         }
+
+        status.textContent =
+            'Login in the popup window. Close it when finished.';
+
+        const timer = setInterval(() => {
+
+            if (loginWindow.closed) {
+                clearInterval(timer);
+
+                status.textContent =
+                    'Popup closed. Loading ServiceNow...';
+
+                frame.src =
+                    'https://abbaiagentspov.service-now.com';
+
+                frame.style.display = 'block';
+            }
+
+        }, 1000);
     });
 </script>
 
