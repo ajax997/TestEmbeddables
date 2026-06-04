@@ -1,149 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ServiceNow Embedded Portal</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f5f7;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+<!--  
+    Module: TestGitHub
+    Group: Group 1
+    Instance: My Incident
+-->
+<sn-embedx-case-list
+	table="incident"
+	limit="20"
+	list-title="List of Cases"
+	query="opened_byDYNAMIC90d1921e5f510100a9ad2572f2b477fe"
+	columns="number,short_description,sys_updated_on,state">
+</sn-embedx-case-list>
+<!--
+	The component also includes the following additional properties:
+	hide-header
+	hide-last-refreshed-text
+	hide-record-count
+	hide-search
+	hide-refresh
+	show-filters
+	hide-when-empty
+	disable-column-resizing
+	hide-errors
+	view
+-->
 
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            text-align: center;
-        }
-
-        .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            margin-top: 50px;
-            display: block; /* Hidden after successful login */
-        }
-
-        .btn-login {
-            background-color: #293e40; /* ServiceNow deep green/gray gray tone */
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-login:hover {
-            background-color: #1e2d2f;
-        }
-
-        #iframe-container {
-            width: 100%;
-            height: 80vh;
-            margin-top: 20px;
-            display: none; /* Hidden until authenticated */
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .status-message {
-            color: #666;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h2>ServiceNow Application Environment</h2>
-    
-    <div id="login-section" class="login-box">
-        <h3>Authentication Required</h3>
-        <p>Please log in via Single Sign-On (SSO) to view this embedded content.</p>
-        <button class="btn-login" onclick="triggerSSOLogin()">Log In with Microsoft</button>
-        <div id="status" class="status-message"></div>
-    </div>
-
-    <div id="iframe-container"></div>
-</div>
-
-<script>
-    // Configuration Constants
-    const SERVICENOW_ORIGIN = "https://abbaiagentspov.service-now.com";
-    
-    // REPLACE THIS: Your exact Microsoft SSO Identity Provider Sys ID from ServiceNow
-    const SSO_SYS_ID = "372ee9e0-9ce0-4033-a64a-c07073a91ecd"; 
-    
-    // REPLACE THIS: The exact page or dashboard you want to display inside the iframe
-    const EMBED_PAGE_URL = "/now/nav/ui/home"; 
-
-    // Listen for the postMessage event from the popup window
-    window.addEventListener("message", (event) => {
-        // SECURITY: Verify the origin matches your ServiceNow instance exactly
-        if (event.origin !== SERVICENOW_ORIGIN) {
-            console.warn("Rejected unauthorized message from origin:", event.origin);
-            return;
-        }
-
-        // Verify the expected payload payload structure
-        if (event.data && event.data.status === "success") {
-            document.getElementById("status").innerText = "Authentication verified. Loading wrapper...";
-            
-            // Switch UI views and load the frame
-            handleLoginSuccess();
-        }
-    }, false);
-
-    function triggerSSOLogin() {
-        document.getElementById("status").innerText = "Opening secure login window...";
-        
-        const width = 600;
-        const height = 700;
-        const left = (window.screen.width / 2) - (width / 2);
-        const top = (window.screen.height / 2) - (height / 2);
-        
-        // Constructs the deep link to kickstart Microsoft SSO directly
-        const loginUrl = `${SERVICENOW_ORIGIN}/login_with_sso.do?glide_sso_id=${SSO_SYS_ID}`;
-
-        window.open(
-            loginUrl, 
-            "ServiceNow_SSO_Login", 
-            `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`
-        );
-    }
-
-    function handleLoginSuccess() {
-        // Hide the login prompts
-        document.getElementById("login-section").style.display = "none";
-        
-        // Build and display the authenticated iframe
-        const container = document.getElementById("iframe-container");
-        container.style.display = "block";
-        
-        const iframe = document.createElement('iframe');
-        iframe.src = `${SERVICENOW_ORIGIN}${EMBED_PAGE_URL}`;
-        iframe.title = "ServiceNow Content";
-        
-        container.appendChild(iframe);
-    }
+<script type="module">
+	import { getEmbeddables } from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
+	
+	getEmbeddables(["sn-embedx-case-list"]);
 </script>
-
-</body>
-</html>
