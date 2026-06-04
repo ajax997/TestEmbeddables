@@ -25,55 +25,20 @@
 <!--  
     Module: TestGitHub
     Group: Group 1
-    Instance: Catalog item 1
+    Instance: My Services 1
 -->
-<sn-embedx-catalog-item-form
-	sys-id="b6f0ba8fc35eea9415eb3a02b401314b"
-	confirmation-text="Request submitted successfully!"
-	confirmation-sub-text="Estimated resolution in 24 hours"
-	reference-number-label="Reference Number :"
-	primary-button-label="View details"
-	secondary-button-label="Browse services"
-	prefill-fields='{}'
-	custom-illustration-size="Auto">
-</sn-embedx-catalog-item-form>
+<sn-custom-embedx-myis></sn-custom-embedx-myis>
 <!--
 	The component also includes the following additional properties:
-	hide-reference-number
-	hide-primary-button
-	hide-secondary-button
-	hide-record-created-confirmation
-	hide-errors
-	hide-notifications
-	hide-additional-details
+	
 -->
 
 <script type="module">
-	import { getEmbeddables, setEvents, setProperties } from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
+	import { getEmbeddables } from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
 	
-	const snEmbedxCatalogItemForm = document.querySelector('sn-embedx-catalog-item-form');
-
-	/* Uncomment this code for the default behaviour of the Catalog item component.
-
-	// Get the catalog item record id from the current URL.
-	// Optionally, get query to pre fill the form.
-	const currentURL = new URL(window.location.href);
-	const urlParams = new URLSearchParams(currentURL.search);
-	const account = urlParams.get('emb_account');
-	const preferred_language = urlParams.get('emb_preferred_language');
-	// Update the sysId of the component property.
-	// Optionally, update the prefill fields property
-	const prefillConfig = {
-			account: account,
-			preferred_language: preferred_language
-	};
-	setProperties(snEmbedxCatalogItemForm,{
-		prefillFields: prefillConfig
-	});
-*/
-
-	getEmbeddables(["sn-embedx-catalog-item-form"]);
+	getEmbeddables(["sn-custom-embedx-myis"]);
 </script>
+
 
 </body>
 </html>
