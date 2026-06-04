@@ -1,15 +1,44 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <title>ServiceNow Embed Test</title>
+
+    <script type="module">
+        import {
+            init
+        } from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
+
+        function getTokenCallBack() {
+            var idToken = "";
+            return Promise.resolve(idToken);
+        }
+
+        await init({
+            theme: 'fad87d2ca304121029a4d1aed31e610f',
+            baseURL: 'https://abbaiagentspov.service-now.com',
+            authCallback: getTokenCallBack,
+            module: '08dfb9c9879dcb1c1197670a0cbb3565',
+            pageName: document.title
+        });
+    </script>
+
+</head>
 <body>
 
+<sn-embedx-case-list
+    table="incident"
+    limit="20"
+    list-title="List of Cases"
+    query="opened_byDYNAMIC90d1921e5f510100a9ad2572f2b477fe"
+    columns="number,short_description,sys_updated_on,state">
+</sn-embedx-case-list>
+
 <script type="module">
+    import {
+        getEmbeddables
+    } from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
 
-import {
-    init
-} from 'https://abbaiagentspov.service-now.com/uxasset/externals/sn_embeddable_core/index.jsdbx';
-
-console.log(init);
-
+    getEmbeddables(["sn-embedx-case-list"]);
 </script>
 
 </body>
